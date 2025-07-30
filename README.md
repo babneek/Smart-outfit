@@ -205,6 +205,6 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## 📞 Contact
 
-- **Email**: your.email@example.com
-- **LinkedIn**: [Your LinkedIn](https://linkedin.com/in/yourprofile)
+- **Email**: babneeksaini@gmail.com
+- **LinkedIn**: [Your LinkedIn](https://www.linkedin.com/in/babneek-kaur)
 - **GitHub**: [Your GitHub](https://github.com/babneek) 
