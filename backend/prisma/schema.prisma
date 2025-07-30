@@ -1,0 +1,159 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  firstName String
+  lastName  String
+  phone     String?
+  avatar    String?
+  role      String   @default("CUSTOMER")
+  
+  // Body measurements
+  height    Float?   // in cm
+  weight    Float?   // in kg
+  chest     Float?   // in cm
+  waist     Float?   // in cm
+  hips      Float?   // in cm
+  inseam    Float?   // in cm
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  orders    Order[]
+  tryOns    TryOnSession[]
+  
+  @@map("users")
+}
+
+model Product {
+  id          String        @id @default(cuid())
+  name        String
+  description String?
+  price       Float
+  currency    String        @default("USD")
+  category    String      // "SHIRTS", "PANTS", etc.
+  brand       String?
+  
+  // Sizing
+  sizes       String        // "S,M,L,XL"
+  colors      String        // "Red,Blue,Black"
+  
+  // Images
+  images      ProductImage[]
+  
+  // Inventory
+  stock       Int           @default(0)
+  isActive    Boolean       @default(true)
+  
+  // Timestamps
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  
+  // Relations
+  orderItems  OrderItem[]
+  tryOns      TryOnSession[]
+  
+  @@map("products")
+}
+
+model ProductImage {
+  id        String   @id @default(cuid())
+  url       String
+  alt       String?
+  isPrimary Boolean  @default(false)
+  
+  // Relations
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  
+  @@map("product_images")
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  orderNumber String      @unique
+  status      String      @default("PENDING")
+  total       Float
+  
+  // Shipping
+  shippingAddress String
+  billingAddress  String?
+  
+  // Payment
+  paymentMethod String?
+  paymentStatus String @default("PENDING")
+  
+  // Relations
+  userId     String
+  user       User        @relation(fields: [userId], references: [id])
+  items      OrderItem[]
+  
+  // Timestamps
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  quantity  Int
+  price     Float
+  size      String?
+  color     String?
+  
+  // Relations
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  
+  @@map("order_items")
+}
+
+model TryOnSession {
+  id        String   @id @default(cuid())
+  
+  // Body data
+  bodyImage     String?  // URL to body scan image
+  poseData      String?  // Pose estimation data (JSON string)
+  measurements  String?  // Body measurements (JSON string)
+  
+  // Try-on result
+  resultImage   String?  // URL to final try-on image
+  confidence    Float?   // AI confidence score
+  
+  // Relations
+  userId    String
+  user      User    @relation(fields: [userId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  
+  @@map("try_on_sessions")
+}
+
+// Note: SQLite doesn't support enums, so we use strings instead
+// UserRole: "ADMIN", "MSME_OWNER", "CUSTOMER"
+// ProductCategory: "SHIRTS", "PANTS", "DRESSES", "SHOES", "ACCESSORIES", "OUTERWEAR"
+// OrderStatus: "PENDING", "CONFIRMED", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED", "REFUNDED"
+// PaymentStatus: "PENDING", "PAID", "FAILED", "REFUNDED" 
