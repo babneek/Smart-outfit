@@ -73,7 +73,7 @@ SmartFit is an AI-powered virtual try-on system designed for MSME clothing brand
 ## 📁 Project Structure
 
 ```
-smartfit/
+Smart-outfit/
 ├── frontend/                 # React.js application
 │   ├── src/
 │   │   ├── components/       # Reusable UI components
@@ -119,8 +119,8 @@ smartfit/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/smartfit.git
-   cd smartfit
+   git clone https://github.com/babneek/Smart-outfit.git
+   cd Smart-outfit
    ```
 
 2. **Set up environment variables**
@@ -207,4 +207,4 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 - **Email**: your.email@example.com
 - **LinkedIn**: [Your LinkedIn](https://linkedin.com/in/yourprofile)
-- **GitHub**: [Your GitHub](https://github.com/yourusername) 
+- **GitHub**: [Your GitHub](https://github.com/babneek) 
